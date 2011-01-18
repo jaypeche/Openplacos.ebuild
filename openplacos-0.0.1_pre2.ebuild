@@ -33,7 +33,7 @@ pkg_setup() {
 	gem install rubygems-update --no-ri --no-rdoc || die "gem install failed !"
 	#update_rubygems || die "gem update failed !"
 	#gem update --no-ri --no-rdoc || die "gem update failed !"
-	gem install activerecord mysql serialport --no-ri --no-rdoc || die "gem install failed !"
+	gem install activerecord mysql ruby-dbus serialport --no-ri --no-rdoc || die "gem install failed !"
 }
 
 src_unpack () {
