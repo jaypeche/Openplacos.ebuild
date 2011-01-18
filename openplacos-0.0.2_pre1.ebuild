@@ -7,7 +7,7 @@ EAPI="2"
 inherit eutils git
 
 DESCRIPTION="OpenplacOS is enrichied in Glouton's Enzymes"
-HOMEPAGE="http://sourceforge.net/projects/openplacos/"
+HOMEPAGE="http://openplacos.sourceforge.net/"
 
 EGIT_REPO_URI="git://openplacos.git.sourceforge.net/gitroot/openplacos/openplacos"
 EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
@@ -86,9 +86,11 @@ pkg_postinst() {
 
 	enewuser openplacos || die
 	echo
-	ewarn "URL administration: http://localhost/openplacos/"
-	ewarn "You should start OpenplacOS service ..!"
-	ewarn "Execute /etc/init/openplacos start"
-	ewarn "And rc-update add openplacos default"
+	einfo "URL administration: http://localhost/openplacos/"
+	einfo "You should start OpenplacOS service ..!"
+	einfo "Execute /etc/init/openplacos start"
+	einfo "And rc-update add openplacos default"
+	einfo
+	einfo "Look at http://openplacos.sourceforge.net/ for more information"
 	echo
 }
