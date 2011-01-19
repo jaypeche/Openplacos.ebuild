@@ -33,7 +33,7 @@ pkg_setup() {
 	gem install rubygems-update --no-ri --no-rdoc || die "gem install failed !"
 	#update_rubygems || die "gem update failed !"
 	#gem update --no-ri --no-rdoc || die "gem update failed !"
-	gem install activerecord mysql ruby-dbus serialport --no-ri --no-rdoc || die "gem install failed !"
+	gem install openplacos ruby-dbus --no-ri --no-rdoc || die "gem install failed !"
 }
 
 src_unpack () {
@@ -85,12 +85,12 @@ src_install () {
 pkg_postinst() {
 
 	enewuser openplacos || die
-	echo
+	einfo
 	einfo "URL administration: http://localhost/openplacos/"
 	einfo "You should start OpenplacOS service ..!"
 	einfo "Execute /etc/init/openplacos start"
 	einfo "And rc-update add openplacos default"
 	einfo
 	einfo "Look at http://openplacos.sourceforge.net/ for more information"
-	echo
+	einfo
 }
