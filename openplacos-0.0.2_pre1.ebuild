@@ -66,6 +66,7 @@ src_install () {
 	insinto /etc/default || die "insinto failed !"
 	doins server/config_with_VirtualPlacos.yaml || die "doins failed"
 	mv -f ${D}/etc/default/config_with_VirtualPlacos.yaml ${D}/etc/default/openplacos || die "mv config failed !"
+	dosym /etc/default/openplacos /etc/conf.d/openplacos || die "dosym failed !"
 
 	einfo "Copying Dbus integration files"
 	insinto /usr/share/dbus-1/system-services || die "insinto failed !"
