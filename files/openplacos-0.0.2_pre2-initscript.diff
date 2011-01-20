@@ -1,0 +1,65 @@
+--- setup_files/openplacos	2011-01-19 09:50:56.000000000 +0100
++++ setup_files/openplacos	2011-01-20 01:25:36.000000000 +0100
+@@ -1,30 +1,33 @@
+-#!/bin/bash
++#!/sbin/runscript
++# Copyright 1999-2007 Gentoo Foundation
++# Distributed under the terms of the GNU General Public License v2
+ 
+-case "$1" in
+-    	start)
+-        	echo "Starting OpenplacOS"
+-		su -l openplacos -s /bin/sh -c "/usr/bin/openplacos-server /etc/default/openplacos > /tmp/openplacos.log &"
+-    if [ $? -gt 0 ]; then
+-		    exit 1
+-		else
+-		    exit 0
+-		fi
+-	;;
+-    	stop)
+-        	echo "Stopping OpenplacOS"
+-		pkill openplacos
+-		if [ $? -gt 0 ]; then
+-		    exit 1
+-		else
+-		    exit 0
+-		fi
+-	;;
+-    	restart)
+-        	$0 stop
+-		sleep 1
+-        	$0 start
+-        ;;
+-    	*)
+-        	echo "usage: $0 {start|stop|restart}"
+-esac
+-exit 0
++## This is init runscript for openplacos (testing) ##
++
++# Variables
++bin="/path/to/bin"
++conf="/etc/conf.d/openplacos"
++log="/var/log/openplacos.log"
++
++# Service dependencies
++depend () {
++	need mysql dbus
++	use logger
++	after dbus mysql
++
++}
++
++# Starting daemon
++
++start() {
++  ebegin "Starting openplacos daemon"
++  start-stop-daemon --start --exec ${bin} 
++  eend $?
++}
++
++# Stop daemon
++stop() {
++	ebegin "Stopping openplacos"
++	start-stop-daemon --stop --quiet --exec ${bin}
++	eend $?
++}
