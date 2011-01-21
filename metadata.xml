@@ -2,11 +2,9 @@
 <pkgmetadata>
   <herd>ruby</herd>
     <maintainer>
-      <email>jaypeche@gmail.com</email>
-	<description>Maintainer Gentoo Linux</description>
+      <email>ruby@gentoo.org</email>
     </maintainer>
   <longdescription>
-This utility is used to create a low cost automation system controlled by computer; it is designed for home, the garden or other stuff.
-OpenplacOS is based on Ruby and is optimized for specific systems like aquaculture, horticulture, air conditioning at home automation.
+This utility is used to create a low cost automation system controlled by computer.
   </longdescription>
 </pkgmetadata>

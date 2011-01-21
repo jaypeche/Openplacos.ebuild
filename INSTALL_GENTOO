@@ -1,20 +1,4 @@
-This file is part of Openplacos.
-
-    Openplacos is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Openplacos is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Openplacos.  If not, see <http://www.gnu.org/licenses/>.
-
-
-<<<<<<<< How-to integrate ebuild in overlay portage tree (version 0.0.2 for example) >>>>>>>>
+<<<<<<<< How-to integrate ebuild in overlay tree (version 0.0.1 for example) >>>>>>>>
 
 1. Create a new portage overlay tree :
 	# mkdir -p /usr/local/portage/app-misc/openplacos/files
@@ -24,13 +8,13 @@ This file is part of Openplacos.
 
 3. Download latest files on repositary http://pingwho.homelinux.org/pub/gentoo/ftp/overlay
 	# cd /usr/local/portage/app-misc/openplacos/files
-	# wget -c http://pingwho.homelinux.org/pub/gentoo/ftp/overlay/app-misc/openplacos/files/openplacos-0.0.2-gentoo.diff
+	# wget -c http://pingwho.homelinux.org/pub/gentoo/ftp/overlay/app-misc/openplacos/files/openplacos-0.0.1-gentoo.diff
 	# cd ..
-	# wget -c http://pingwho.homelinux.org/pub/gentoo/ftp/overlay/app-misc/openplacos/openplacos-0.0.2.ebuild
+	# wget -c http://pingwho.homelinux.org/pub/gentoo/ftp/overlay/app-misc/openplacos/openplacos-0.0.1.ebuild
 	# wget -c http://pingwho.homelinux.org/pub/gentoo/ftp/overlay/app-misc/openplacos/Changelog
 	
-4. Creating checksums Manifest :
-	# ebuild openplacos-0.0.2.ebuild digest
+4. Create checksums Manifest :
+	# ebuild openplacos-0.0.1.ebuild digest
 
 4. Modify package.keywords in portage :
 	#  echo "app-misc/openplacos   ~x86" */ Or '~amd64' on 64bits OS platform
@@ -42,6 +26,6 @@ This file is part of Openplacos.
 	# /etc/init.d/openplacos start
 	# rc-update add openplacos default
 
-7. Administation URL : http://localhost/openplacos; enjoy \_/°< !
+7. Administation URL : http://localhost/openplacos
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
