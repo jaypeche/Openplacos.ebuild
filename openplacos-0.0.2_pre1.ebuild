@@ -10,7 +10,9 @@ DESCRIPTION="OpenplacOS is enrichied in Glouton's Enzymes"
 HOMEPAGE="http://openplacos.sourceforge.net/"
 
 EGIT_REPO_URI="git://openplacos.git.sourceforge.net/gitroot/openplacos/openplacos"
+EGIT_BRANCH="master"
 EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
+#EGIT_COMMIT="6a0004a8bb25c6108c25a16c9d78c14137f32d9f"
 OPOS_PATH="/usr/lib/ruby/openplacos"
 
 LICENSE="GPL-3"
