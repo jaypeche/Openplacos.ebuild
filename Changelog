@@ -7,15 +7,13 @@
 
 	(17 Jan 2011) <ruby@gentoo.org>
 	+ Version 0.0.2 is released; +Ebuild marked to 0.0.2_pre1;
-	- todo: Bugfix with ruby-dbus-0.6.0 gem library; modify runscript;
-
+	
 * openplacos-0.0.1 Git revision
 
 	(15 Jan 2011) <ruby@gentoo.org>
 	+ Add Gentoo_Install doc; trivial changes;
 	+ fix path; fix links; +metadata.xml; +Ebuild marked to _pre2
-	- fixme: ruby+dbus in virtual mode; todo: add gentoo std runscript;
-
+	
 	(14 Jan 2011) <ruby@gentoo.org>
 	+ Add Gentoo patch support; Standard git cmd; Nagios, Gnome, GTK+-2 support;
 	+ Installing files and linking; dbus integration; default config; daemon install; 
