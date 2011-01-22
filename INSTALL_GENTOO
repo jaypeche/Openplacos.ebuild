@@ -26,6 +26,6 @@
 	# /etc/init.d/openplacos start
 	# rc-update add openplacos default
 
-7. Administation URL : http://localhost/openplacos
+7. Administation URL : http://localhost:8081/openplacos
 
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
