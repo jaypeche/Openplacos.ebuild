@@ -10,21 +10,25 @@ DESCRIPTION="OpenplacOS is enrichied in Glouton's Enzymes"
 HOMEPAGE="http://openplacos.sourceforge.net/"
 
 EGIT_REPO_URI="git://openplacos.git.sourceforge.net/gitroot/openplacos/openplacos"
-EGIT_BRANCH="master"
 EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
+
+# This is an example :
+#EGIT_BRANCH="master"
 #EGIT_COMMIT="6a0004a8bb25c6108c25a16c9d78c14137f32d9f"
-OPOS_PATH="/usr/lib/ruby/openplacos"
+
+LIB_RUBY="/usr/lib/ruby"
+OPOS_PATH="${LIB_RUBY}/openplacos"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="gnome nagios"
+IUSE="gnome mysql +multithread nagios +sqlite3 -testing"
 
 DEPEND="dev-vcs/git
 	sys-apps/dbus
 	dev-lang/ruby
 	>=dev-ruby/rubygems-1.3.7-r1
-	dev-db/mysql
+	mysql?  ( dev-db/mysql )
 	gnome?  ( dev-ruby/ruby-gnome2
 		>=x11-libs/gtk+-2.20.1 )
 	nagios? ( net-analyzer/nagios )"
@@ -33,12 +37,48 @@ pkg_setup() {
 	einfo "Ruby gem library installation"
 	einfo "This could take a while.. please wait..."
 	gem install rubygems-update --no-ri --no-rdoc || die "gem install failed !"
-	#update_rubygems || die "gem update failed !"
-	#gem update --no-ri --no-rdoc || die "gem update failed !"
-	gem install openplacos ruby-dbus --no-ri --no-rdoc || die "gem install failed !"
+
+	einfo "Installing default gems for opos"
+	gem install activerecord mysql serialport --no-ri --no-rdoc || die "gem install failed !"
+
+	# Ruby-dbus multithread support
+	if use multithread ; then
+		einfo "Installing ruby-dbus multithread gem"
+		mkdir -p  ${D}/${LIB_RUBY}/gems/tmp || die "mkdir failed !"
+		cd ${D}/${LIB_RUBY}/gems/tmp || die
+		einfo "Cloning files"
+		git clone git://github.com/mvidner/ruby-dbus.git || die "git clone failed !"
+		einfo "Genrating gem"
+		cd ${D}/${LIB_RUBY}/gems/tmp/ruby-dbus
+		rake gem || die "rake failed !" || die "rake failed !"
+		einfo "Installing gem"
+		gem install ${D}/${LIB_RUBY}/gems/tmp/ruby-dbus/pkg/*.gem --no-ri --no-rdoc || die "gem install failed !"
+	else
+		einfo "Installing ruby-dbus without multithread gem"
+		gem install ruby-dbus --no-ri --no-rdoc || die "gem install failed !"
+
+	fi
+
+	# Ruby sqlite3 support
+	if use sqlite3 ; then
+		einfo "Installing sqlite3 gem"
+		gem install sqlite3 --no-ri --no-rdoc || "gem install failed !"
+	fi
+
+	# This is obsolete with rubygems > 1.3.6
+	# update_rubygems || die "gem update failed !"
+	# gem update --no-ri --no-rdoc || die "gem update failed !"
 }
 
 src_unpack () {
+
+	# Choose branch master||unstable
+	if use testing ; then
+		EGIT_BRANCH="unstable" \
+		&&  EGIT_STORE_DIR="/usr/portage/git-src/openplacos/unstable"
+	else
+		EGIT_BRANCH="master"
+	fi
 	git_src_unpack || die "src_unpack failed !"
 }
 
@@ -63,6 +103,10 @@ src_install () {
         fperms +x /usr/bin/openplacos-server-xmlrpc || die
 	dohard ${OPOS_PATH}/client/soap/server/soap-server.rb  /usr/bin/openplacos-server-soap || die
         fperms +x /usr/bin/openplacos-server-soap || die
+
+	einfo "Checking default drivers permissions"
+	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/VirtualPlacos.rb || die "fperms failed !"
+	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/compensation_hygro.rb || die
 
 	einfo "Copying default configuration"
 	insinto /etc/default || die "insinto failed !"
@@ -89,7 +133,7 @@ pkg_postinst() {
 
 	enewuser openplacos || die
 	einfo
-	einfo "URL administration: http://localhost/openplacos/"
+	einfo "URL administration: http://localhost:8081/openplacos/"
 	einfo "You should start OpenplacOS service ..!"
 	einfo "Execute /etc/init/openplacos start"
 	einfo "And rc-update add openplacos default"

@@ -3,21 +3,20 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: 
 
-* openplacos-0.0.2 Git revision
-
-	(17 Jan 2011) <ruby@gentoo.org>
-	+ Version 0.0.2 is released; +Ebuild marked to 0.0.2_pre1;
-	
 * openplacos-0.0.1 Git revision
 
-	(15 Jan 2011) <ruby@gentoo.org>
+	(22 Jan 2011) jay <ruby@gentoo.org>
+	+ add ruby-dbus multithread gem; add branch unstable; add sqlite3 gem;
+	+ Ebuild marked to _pre3
+
+	(15 Jan 2011) jay <ruby@gentoo.org>
 	+ Add Gentoo_Install doc; trivial changes;
 	+ fix path; fix links; +metadata.xml; +Ebuild marked to _pre2
 	
-	(14 Jan 2011) <ruby@gentoo.org>
+	(14 Jan 2011) jay <ruby@gentoo.org>
 	+ Add Gentoo patch support; Standard git cmd; Nagios, Gnome, GTK+-2 support;
 	+ Installing files and linking; dbus integration; default config; daemon install; 
 	+ Ebuild marked to _pre1;
 
-        (13 Jan 2011) <ruby@gentoo.org>
+        (13 Jan 2011) jay <ruby@gentoo.org>
         -> New ebuild
