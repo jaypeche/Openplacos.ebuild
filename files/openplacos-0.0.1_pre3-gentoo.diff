@@ -1,6 +1,6 @@
 diff -urN openplacos.orig/INSTALL_GENTOO openplacos/INSTALL_GENTOO
---- openplacos.orig/INSTALL_GENTOO	1970-01-01 01:00:00.000000000 +0100
-+++ openplacos/INSTALL_GENTOO	2011-01-22 18:12:26.000000000 +0100
+--- INSTALL_GENTOO	1970-01-01 01:00:00.000000000 +0100
++++ INSTALL_GENTOO	2011-01-22 18:12:26.000000000 +0100
 @@ -0,0 +1,31 @@
 +<<<<<<<< How-to integrate ebuild in overlay tree (version 0.0.1 for example) >>>>>>>>
 +
@@ -34,8 +34,8 @@ diff -urN openplacos.orig/INSTALL_GENTOO openplacos/INSTALL_GENTOO
 +
 +<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplacos
---- openplacos.orig/setup_files/openplacos	2011-01-22 18:10:07.000000000 +0100
-+++ openplacos/setup_files/openplacos	2011-01-22 20:11:38.000000000 +0100
+--- setup_files/openplacos	2011-01-22 18:10:07.000000000 +0100
++++ setup_files/openplacos	2011-01-22 20:11:38.000000000 +0100
 @@ -3,6 +3,7 @@
  case "$1" in
      	start)
