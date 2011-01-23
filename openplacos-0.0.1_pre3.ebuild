@@ -61,7 +61,7 @@ pkg_setup() {
 	# Ruby sqlite3 support
 	if use sqlite3 ; then
 		einfo "Installing sqlite3 gem"
-		gem install sqlite3 --no-ri --no-rdoc || "gem install failed !"
+		gem install sqlite3 --no-ri --no-rdoc || die "gem install failed !"
 	fi
 
 	# This is obsolete with rubygems > 1.3.6
@@ -86,13 +86,14 @@ src_install () {
 	insinto ${OPOS_PATH} || die "insinto failed !"
 	doins -r * || die "doins failed !"
 
-	if use !testing ; then
-
 	einfo "Linking executables files"
         dohard ${OPOS_PATH}/server/Top.rb /usr/bin/openplacos-server || die "dohard failed !"
         fperms +x /usr/bin/openplacos-server || die "fperms failed !"
 	dohard ${OPOS_PATH}/client/CLI_client/opos-client.rb /usr/bin/openplacos || die
         fperms +x /usr/bin/openplacos || die
+
+	if use !testing ; then
+
 	dohard ${OPOS_PATH}/client/IHMlocal/IHM.rb /usr/bin/openplacos-gtk || die
         fperms +x /usr/bin/openplacos-gtk || die
 	dohard ${OPOS_PATH}/client/xml-rpc/client/xml-rpc-client.rb  /usr/bin/openplacos-xmlrpc || die
