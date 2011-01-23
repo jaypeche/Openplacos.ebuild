@@ -16,8 +16,7 @@ EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
 #EGIT_BRANCH="master"
 #EGIT_COMMIT="6a0004a8bb25c6108c25a16c9d78c14137f32d9f"
 
-LIB_RUBY="/usr/lib/ruby"
-OPOS_PATH="${LIB_RUBY}/openplacos"
+OPOS_PATH="/usr/lib/ruby/openplacos"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -43,20 +42,20 @@ pkg_setup() {
 
 	# Ruby-dbus multithread support
 	if use multithread ; then
-		einfo "Installing ruby-dbus multithread gem"
-		mkdir -p  ${D}/${LIB_RUBY}/gems/tmp || die "mkdir failed !"
-		cd ${D}/${LIB_RUBY}/gems/tmp || die
+		einfo "Installing ruby-dbus with multithreading"
+		cd ${T}
 		einfo "Cloning files"
 		git clone git://github.com/mvidner/ruby-dbus.git || die "git clone failed !"
+		cd ${T}/ruby-dbus
+		einfo "Ckecking multithreading"
+		git checkout multithreading
 		einfo "Genrating gem"
-		cd ${D}/${LIB_RUBY}/gems/tmp/ruby-dbus
-		rake gem || die "rake failed !" || die "rake failed !"
+		rake gem || die "rake failed !"
 		einfo "Installing gem"
-		gem install ${D}/${LIB_RUBY}/gems/tmp/ruby-dbus/pkg/*.gem --no-ri --no-rdoc || die "gem install failed !"
+		gem install ${T}/ruby-dbus/pkg/*.gem --no-ri --no-rdoc || die "gem install failed !"
 	else
-		einfo "Installing ruby-dbus without multithread gem"
+		einfo "Installing ruby-dbus without multithreading"
 		gem install ruby-dbus --no-ri --no-rdoc || die "gem install failed !"
-
 	fi
 
 	# Ruby sqlite3 support
@@ -75,11 +74,10 @@ src_unpack () {
 	# Choose branch master||unstable
 	if use testing ; then
 		EGIT_BRANCH="unstable" \
-		&&  EGIT_STORE_DIR="/usr/portage/git-src/openplacos/unstable"
-	else
-		EGIT_BRANCH="master"
+		&& EGIT_STORE_DIR="/usr/portage/git-src/openplacos/unstable" \
+		&& EGIT_COMMIT="unstable"
 	fi
-	git_src_unpack || die "src_unpack failed !"
+		git_src_unpack || die "src_unpack failed !"
 }
 
 src_install () {
@@ -87,6 +85,8 @@ src_install () {
 	einfo "Copying files"
 	insinto ${OPOS_PATH} || die "insinto failed !"
 	doins -r * || die "doins failed !"
+
+	if use !testing ; then
 
 	einfo "Linking executables files"
         dohard ${OPOS_PATH}/server/Top.rb /usr/bin/openplacos-server || die "dohard failed !"
@@ -103,6 +103,8 @@ src_install () {
         fperms +x /usr/bin/openplacos-server-xmlrpc || die
 	dohard ${OPOS_PATH}/client/soap/server/soap-server.rb  /usr/bin/openplacos-server-soap || die
         fperms +x /usr/bin/openplacos-server-soap || die
+
+	fi
 
 	einfo "Checking default drivers permissions"
 	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/VirtualPlacos.rb || die "fperms failed !"
