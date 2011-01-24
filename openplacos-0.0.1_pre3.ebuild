@@ -41,6 +41,10 @@ pkg_setup() {
 	gem install activerecord mysql serialport --no-ri --no-rdoc || die "gem install failed !"
 
 	# Ruby-dbus multithread support
+	#
+	# Bugfix(20110124) :	branch : multithreading origin/multithreading
+	#			at commit 89843b67e85a941317049d523a545042a4fddb07
+
 	if use multithread ; then
 		einfo "Installing ruby-dbus with multithreading"
 		cd ${T}
@@ -48,7 +52,8 @@ pkg_setup() {
 		git clone git://github.com/mvidner/ruby-dbus.git || die "git clone failed !"
 		cd ${T}/ruby-dbus
 		einfo "Ckecking multithreading"
-		git checkout multithreading
+		git checkout -b multithreading origin/multithreading
+		git reset --hard 89843b67e85a941317049d523a545042a4fddb07
 		einfo "Genrating gem"
 		rake gem || die "rake failed !"
 		einfo "Installing gem"
