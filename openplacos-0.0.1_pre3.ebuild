@@ -139,7 +139,8 @@ src_install () {
 
 pkg_postinst() {
 
-	enewuser openplacos || die
+	# Adding openplacos user in following groups
+	enewuser openplacos -1 -1 -1 usb,dialout
 	einfo
 	einfo "URL administration: http://localhost:8081/openplacos/"
 	einfo "You should start OpenplacOS service ..!"
