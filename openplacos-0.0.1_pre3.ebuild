@@ -59,7 +59,7 @@ pkg_setup() {
 		einfo "Installing gem"
 		gem install ${T}/ruby-dbus/pkg/*.gem --no-ri --no-rdoc || die "gem install failed !"
 	else
-		einfo "Installing ruby-dbus without multithreading"
+		einfo "Installing default ruby-dbus gem"
 		gem install ruby-dbus --no-ri --no-rdoc || die "gem install failed !"
 	fi
 
