@@ -14,7 +14,7 @@ EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
 
 # This is an example :
 #EGIT_BRANCH="master"
-#EGIT_COMMIT="6a0004a8bb25c6108c25a16c9d78c14137f32d9f"
+#EGIT_COMMIT="d8dc9d2a2a695ec29a2fe2f15274800612e242c5"
 
 OPOS_PATH="/usr/lib/ruby/openplacos"
 
@@ -67,7 +67,7 @@ src_unpack () {
 	if use testing ; then
 		EGIT_BRANCH="unstable" \
 		&& EGIT_STORE_DIR="/usr/portage/git-src/openplacos/unstable" \
-		&& EGIT_COMMIT="unstable"
+		&& EGIT_COMMIT="d8dc9d2a2a695ec29a2fe2f15274800612e242c5"
 	fi
 		git_src_unpack || die "src_unpack failed !"
 }

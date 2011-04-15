@@ -5,6 +5,9 @@
 
 * openplacos-0.0.1 Git revision
 
+	(15 apr 2011) jay <ruby@gentoo.org>
+	+ functionnal commit in testing mode (gtk)
+
 	(22 Jan 2011) jay <ruby@gentoo.org>
 	+ add ruby-dbus multithread gem; add branch unstable; add sqlite3 gem;
 	+ Ebuild marked to _pre3
