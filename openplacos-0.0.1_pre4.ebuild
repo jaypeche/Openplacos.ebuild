@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -6,13 +6,11 @@ EAPI="2"
 
 inherit eutils git
 
-DESCRIPTION="OpenplacOS is enrichied in Glouton's Enzymes"
+DESCRIPTION="This utility is used to create a low cost automation system controlled by computer"
 HOMEPAGE="http://openplacos.sourceforge.net/"
 
 EGIT_REPO_URI="git://openplacos.git.sourceforge.net/gitroot/openplacos/openplacos"
 EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
-
-# This is an example :
 #EGIT_BRANCH="master"
 #EGIT_COMMIT="d8dc9d2a2a695ec29a2fe2f15274800612e242c5"
 
@@ -21,17 +19,17 @@ OPOS_PATH="/usr/lib/ruby/openplacos"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="gnome mysql nagios -phidget +sqlite3 -testing"
+IUSE="gnome -arduino -phidget -testing"
 
 DEPEND="dev-vcs/git
 	sys-apps/dbus
 	dev-lang/ruby
+	dev-db/mysql
 	>=dev-ruby/rubygems-1.3.7-r1
+	arduino? ( dev-embedded/arduino )
 	phidget? ( dev-embedded/phidget )
-	mysql?  ( dev-db/mysql )
 	gnome?  ( dev-ruby/ruby-gnome2
-		>=x11-libs/gtk+-2.20.1 )
-	nagios? ( net-analyzer/nagios )"
+		>=x11-libs/gtk+-2.20.1 )"
 
 pkg_setup() {
 	einfo "Ruby gem library installation"
@@ -43,22 +41,22 @@ pkg_setup() {
 	gem install activerecord mysql serialport --no-ri --no-rdoc || die "gem install failed !"
 
 	# OpenplacOS gem
-	einfo "Installing OpenplacOS gem"
+	einfo "Installing openplacos gem"
         gem install openplacos --no-ri --no-rdoc || die "gem install failed !"
 
-	# Ruby-dbus OpenplacOS Version 0.6.1
+	# Ruby-dbus-openplacos gem
 	einfo "Installing ruby-dbus-openplacos gem"
 	gem install ruby-dbus-openplacos --no-ri --no-rdoc || die "gem install failed !"
 
-	# Ruby sqlite3 support
-	if use sqlite3 ; then
+	# Micro-optparse gem (NEW)
+	einfo "Installing micro-optparse gem"
+	gem install micro-optparse --no-ri --no-rdoc || die "gem install failed !"
+
+	# Sqlite3 gem
+	if use testing ; then
 		einfo "Installing sqlite3 gem"
 		gem install sqlite3 --no-ri --no-rdoc || die "gem install failed !"
 	fi
-
-	# This is obsolete with rubygems > 1.3.6
-	# update_rubygems || die "gem update failed !"
-	# gem update --no-ri --no-rdoc || die "gem update failed !"
 }
 
 src_unpack () {
@@ -88,36 +86,17 @@ src_install () {
 	dohard ${OPOS_PATH}/client/CLI_client/opos-client.rb /usr/bin/openplacos || die
         fperms +x /usr/bin/openplacos || die
 
-	if use !testing ; then
-
-	# IHM Client
-	dohard ${OPOS_PATH}/client/IHMlocal/IHM.rb /usr/bin/openplacos-gtk || die
-        fperms +x /usr/bin/openplacos-gtk || die
-
-	# XML-RPC Server
-	# dohard ${OPOS_PATH}/server/xml-rpc/xml-rpc-server.rb  /usr/bin/openplacos-server-xmlrpc || die
-        # fperms +x /usr/bin/openplacos-server-xmlrpc || die
-
-	# SOAP Server ( inactive in stable version )
-	# dohard ${OPOS_PATH}/server/soap/soap-server.rb  /usr/bin/openplacos-server-soap || die
-        # fperms +x /usr/bin/openplacos-server-soap || die
-
-	else
-        ewarn "WARNING! Plugins was not installated in testing mode"
-
-	# XML-RPC Client ( inactive in stable version )
+	# XML-RPC Client
 	dohard ${OPOS_PATH}/client/xml-rpc/xml-rpc-client.rb  /usr/bin/openplacos-xmlrpc || die
         fperms +x /usr/bin/openplacos-xmlrpc || die
 
-	# SOAP Client ( inactive in stable version )
+	# SOAP Client
 	dohard ${OPOS_PATH}/client/soap/soap-client.rb  /usr/bin/openplacos-soap || die
         fperms +x /usr/bin/openplacos-soap || die
 
-	# GTK Client ( inactive in stable version )
+	# GTK Client
 	dohard ${OPOS_PATH}/client/gtk/gtk.rb  /usr/bin/openplacos-gtk || die
         fperms +x /usr/bin/openplacos-gtk || die
-
-	fi
 
 	einfo "Checking default drivers permissions"
 	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/VirtualPlacos.rb || die "fperms failed !"
@@ -138,7 +117,7 @@ src_install () {
 	einfo "Copying daemon file"
 	insinto /etc/init.d || die "insinto failed !"
 	doins setup_files/openplacos || die "doins failed !"
-	fperms a+x /etc/init.d/openplacos || die "fperms failed !"
+	fperms +x /etc/init.d/openplacos || die "fperms failed !"
 
 	einfo "Installing Gentoo Linux documentation"
 	dodoc INSTALL_GENTOO || die "dodoc failed !"
@@ -150,7 +129,7 @@ pkg_postinst() {
 	enewuser openplacos -1 -1 -1 usb,dialout
 	einfo "Reloading dbus"
 	/etc/init.d/dbus reload
-	einfo "URL administration: http://localhost:8081/openplacos/"
+	einfo "URL administration: http://localhost:8080/openplacos/"
 	einfo "You should start OpenplacOS service ..!"
 	einfo "Execute /etc/init/openplacos start"
 	einfo "And rc-update add openplacos default"
