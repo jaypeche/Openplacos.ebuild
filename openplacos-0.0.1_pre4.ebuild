@@ -31,7 +31,7 @@ DEPEND="dev-vcs/git
 	gnome? ( dev-ruby/ruby-gnome2
 		>=x11-libs/gtk+-2.20.1 )"
 
-	pkg_setup() {
+pkg_setup() {
 	einfo "Ruby gem library installation"
 	einfo "This could take a while.. please wait..."
 	gem install rubygems-update --no-ri --no-rdoc || die "gem install failed !"
