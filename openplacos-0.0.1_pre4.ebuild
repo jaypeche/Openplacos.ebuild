@@ -28,10 +28,10 @@ DEPEND="dev-vcs/git
 	>=dev-ruby/rubygems-1.3.7-r1
 	arduino? ( dev-embedded/arduino )
 	phidget? ( dev-embedded/phidget )
-	gnome?  ( dev-ruby/ruby-gnome2
+	gnome? ( dev-ruby/ruby-gnome2
 		>=x11-libs/gtk+-2.20.1 )"
 
-pkg_setup() {
+	pkg_setup() {
 	einfo "Ruby gem library installation"
 	einfo "This could take a while.. please wait..."
 	gem install rubygems-update --no-ri --no-rdoc || die "gem install failed !"
@@ -127,10 +127,21 @@ pkg_postinst() {
 
 	# Adding openplacos user in following groups
 	enewuser openplacos -1 -1 -1 usb,dialout
+
 	einfo "Reloading dbus"
 	/etc/init.d/dbus reload
-	einfo "URL administration: http://localhost:8080/openplacos/"
-	einfo "You should start OpenplacOS service ..!"
+
+	einfo
+	einfo "----------------------------------------------------"
+    	einfo "Before running opemplacos for first time"
+	einfo "You should process database configuration"
+    	einfo "Please provide MySQL root password"
+    	einfo "----------------------------------------------------"
+    	einfo "# mysql -u root -p {OPOS_PATH}/setup_files/install.sql"
+	einfo "# /etc/init.d/mysql start && rc-update add mysql default"
+	einfo
+
+	einfo "Now, start OpenplacOS daemon"
 	einfo "Execute /etc/init/openplacos start"
 	einfo "And rc-update add openplacos default"
 	einfo
