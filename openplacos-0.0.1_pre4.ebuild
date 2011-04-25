@@ -132,18 +132,19 @@ pkg_postinst() {
 	/etc/init.d/dbus reload
 
 	einfo
-	einfo "----------------------------------------------------"
-    	einfo "Before running opemplacos for first time"
-	einfo "You should process database configuration"
+	einfo "Before running OpemplacOS for first time"
+	einfo "You should proceed your database configuration"
     	einfo "Please provide MySQL root password"
-    	einfo "----------------------------------------------------"
-    	einfo "# mysql -u root -p {OPOS_PATH}/setup_files/install.sql"
+    	einfo
+    	einfo "# mysql -u root -p < /usr/lib/ruby/openplacos/setup_files/install.sql"
 	einfo "# /etc/init.d/mysql start && rc-update add mysql default"
 	einfo
-
-	einfo "Now, start OpenplacOS daemon"
-	einfo "Execute /etc/init/openplacos start"
-	einfo "And rc-update add openplacos default"
+	einfo "Start OpenplacOS daemon"
+	einfo "# /etc/init/openplacos start"
+	einfo "# rc-update add openplacos default"
+	einfo
+	einfo "Now, you can launch GTK Client for example"
+	einfo "$ /usr/bin/openplacos-gtk"
 	einfo
 	einfo "Look at http://openplacos.sourceforge.net/ for more information"
 	einfo
