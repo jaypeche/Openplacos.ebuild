@@ -137,7 +137,8 @@ pkg_postinst() {
     	einfo "Please provide MySQL root password"
     	einfo
     	einfo "# mysql -u root -p < /usr/lib/ruby/openplacos/setup_files/install.sql"
-	einfo "# /etc/init.d/mysql start && rc-update add mysql default"
+	einfo "# /etc/init.d/mysql start" 
+	einfo "# rc-update add mysql default"
 	einfo
 	einfo "Start OpenplacOS daemon"
 	einfo "# /etc/init/openplacos start"
