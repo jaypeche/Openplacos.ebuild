@@ -19,19 +19,21 @@ OPOS_PATH="/usr/lib/ruby/openplacos"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="gnome -arduino -phidget -testing"
+IUSE="-arduino +gtk2 -phidget -testing"
 
 DEPEND="dev-vcs/git
 	sys-apps/dbus
 	dev-lang/ruby
-	dev-db/mysql
 	>=dev-ruby/rubygems-1.3.7-r1
 	arduino? ( dev-embedded/arduino )
 	phidget? ( dev-embedded/phidget )
-	gnome? ( dev-ruby/ruby-gnome2
-		>=x11-libs/gtk+-2.20.1 )"
+	gtk2? ( dev-ruby/ruby-gnome2
+	>=x11-libs/gtk+-2.20.1 )
+	testing? ( dev-db/sqlite )
+	!testing? ( dev-db/mysql )"
 
 pkg_setup() {
+
 	einfo "Ruby gem library installation"
 	einfo "This could take a while.. please wait..."
 	gem install rubygems-update --no-ri --no-rdoc || die "gem install failed !"
@@ -40,13 +42,13 @@ pkg_setup() {
 	einfo "Installing default gems for opos"
 	gem install activerecord mysql serialport --no-ri --no-rdoc || die "gem install failed !"
 
-	# OpenplacOS gem
-	einfo "Installing openplacos gem"
-        gem install openplacos --no-ri --no-rdoc || die "gem install failed !"
-
 	# Ruby-dbus-openplacos gem
 	einfo "Installing ruby-dbus-openplacos gem"
 	gem install ruby-dbus-openplacos --no-ri --no-rdoc || die "gem install failed !"
+
+	# OpenplacOS gem
+	einfo "Installing openplacos gem"
+	gem install openplacos --no-ri --no-rdoc || die "gem install failed !"
 
 	# Micro-optparse gem (NEW)
 	einfo "Installing micro-optparse gem"
@@ -62,6 +64,7 @@ pkg_setup() {
 src_unpack () {
 
 	# Choose branch master||unstable
+
 	if use testing ; then
 		EGIT_BRANCH="unstable" \
 		&& EGIT_STORE_DIR="/usr/portage/git-src/openplacos/unstable" \
@@ -80,23 +83,25 @@ src_install () {
 
 	# OPOS Server
 	dohard ${OPOS_PATH}/server/Top.rb /usr/bin/openplacos-server || die "dohard failed !"
-        fperms +x /usr/bin/openplacos-server || die "fperms failed !"
+	fperms +x /usr/bin/openplacos-server || die "fperms failed !"
 
 	# CLI Client
 	dohard ${OPOS_PATH}/client/CLI_client/opos-client.rb /usr/bin/openplacos || die
-        fperms +x /usr/bin/openplacos || die
+	fperms +x /usr/bin/openplacos || die
 
 	# XML-RPC Client
-	dohard ${OPOS_PATH}/client/xml-rpc/xml-rpc-client.rb  /usr/bin/openplacos-xmlrpc || die
-        fperms +x /usr/bin/openplacos-xmlrpc || die
+	dohard ${OPOS_PATH}/client/xml-rpc/xml-rpc-client.rb /usr/bin/openplacos-xmlrpc || die
+	fperms +x /usr/bin/openplacos-xmlrpc || die
 
 	# SOAP Client
-	dohard ${OPOS_PATH}/client/soap/soap-client.rb  /usr/bin/openplacos-soap || die
-        fperms +x /usr/bin/openplacos-soap || die
+	dohard ${OPOS_PATH}/client/soap/soap-client.rb /usr/bin/openplacos-soap || die
+	fperms +x /usr/bin/openplacos-soap || die
 
 	# GTK Client
-	dohard ${OPOS_PATH}/client/gtk/gtk.rb  /usr/bin/openplacos-gtk || die
-        fperms +x /usr/bin/openplacos-gtk || die
+	if use gtk2 ; then
+		dohard ${OPOS_PATH}/client/gtk/gtk.rb /usr/bin/openplacos-gtk || die
+       		fperms +x /usr/bin/openplacos-gtk || die
+	fi
 
 	einfo "Checking default drivers permissions"
 	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/VirtualPlacos.rb || die "fperms failed !"
@@ -131,14 +136,16 @@ pkg_postinst() {
 	einfo "Reloading dbus"
 	/etc/init.d/dbus reload
 
-	einfo
-	einfo "Before running OpemplacOS for first time"
-	einfo "You should proceed your database configuration"
-    	einfo "Please provide MySQL root password"
-    	einfo
-    	einfo "# mysql -u root -p < /usr/lib/ruby/openplacos/setup_files/install.sql"
-	einfo "# /etc/init.d/mysql start" 
-	einfo "# rc-update add mysql default"
+	if use !testing; then
+		einfo
+		einfo "Before running OpemplacOS for first time"
+		einfo "You should proceed your database configuration"
+		einfo "Please provide MySQL root password"
+		einfo
+		einfo "# mysql -u root -p < /usr/lib/ruby/openplacos/setup_files/install.sql"
+		einfo "# /etc/init.d/mysql start"
+		einfo "# rc-update add mysql default"
+	fi
 	einfo
 	einfo "Start OpenplacOS daemon"
 	einfo "# /etc/init/openplacos start"
