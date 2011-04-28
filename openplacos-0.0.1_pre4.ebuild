@@ -136,7 +136,7 @@ pkg_postinst() {
 	einfo "Reloading dbus"
 	/etc/init.d/dbus reload
 
-	if use !testing; then
+	if use !testing ; then
 		einfo
 		einfo "Before running OpemplacOS for first time"
 		einfo "You should proceed your database configuration"
@@ -150,9 +150,12 @@ pkg_postinst() {
 	einfo "Start OpenplacOS daemon"
 	einfo "# /etc/init/openplacos start"
 	einfo "# rc-update add openplacos default"
-	einfo
-	einfo "Now, you can launch GTK Client for example"
-	einfo "$ /usr/bin/openplacos-gtk"
+
+	if use gtk2 ; then
+		einfo
+		einfo "Now, you can launch GTK Client for example"
+		einfo "$ /usr/bin/openplacos-gtk"
+	fi
 	einfo
 	einfo "Look at http://openplacos.sourceforge.net/ for more information"
 	einfo
