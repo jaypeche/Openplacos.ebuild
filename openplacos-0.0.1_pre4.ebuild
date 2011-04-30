@@ -131,7 +131,7 @@ src_install () {
 pkg_postinst() {
 
 	# Adding openplacos user in following groups
-	enewuser openplacos -1 -1 -1 usb,dialout
+	enewuser openplacos -1 -1 -1 usb,dialout || die "enewuser failed !"
 
 	einfo "Reloading dbus"
 	/etc/init.d/dbus reload
@@ -148,7 +148,7 @@ pkg_postinst() {
 	fi
 	einfo
 	einfo "Start OpenplacOS daemon"
-	einfo "# /etc/init/openplacos start"
+	einfo "# /etc/init.d/openplacos start"
 	einfo "# rc-update add openplacos default"
 
 	if use gtk2 ; then
