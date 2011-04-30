@@ -82,8 +82,14 @@ src_install () {
 	einfo "Linking common executables files"
 
 	# OPOS Server
-	dohard ${OPOS_PATH}/server/Top.rb /usr/bin/openplacos-server || die "dohard failed !"
-	fperms +x /usr/bin/openplacos-server || die "fperms failed !"
+
+	if use testing ; then
+		dohard ${OPOS_PATH}/server/Top.rb /usr/bin/openplacos-server || die "dohard failed !"
+		fperms +x /usr/bin/openplacos-server || die "fperms failed !"
+	else
+		dohard ${OPOS_PATH}/server/main.rb /usr/bin/openplacos-server || die
+		fperms +x /usr/bin/openplacos-server || die
+	fi
 
 	# CLI Client
 	dohard ${OPOS_PATH}/client/CLI_client/opos-client.rb /usr/bin/openplacos || die
@@ -99,8 +105,13 @@ src_install () {
 
 	# GTK Client
 	if use gtk2 ; then
-		dohard ${OPOS_PATH}/client/gtk/gtk.rb /usr/bin/openplacos-gtk || die
-       		fperms +x /usr/bin/openplacos-gtk || die
+		if use testing ; then
+			dohard ${OPOS_PATH}/client/gtk/gtk.rb /usr/bin/openplacos-gtk || die
+       			fperms +x /usr/bin/openplacos-gtk || die
+		else
+			dohard ${OPOS_PATH}/client/deprecated/gtk/gtk.rb /usr/bin/openplacos-gtk || die
+			fperms +x /usr/bin/openplacos-gtk
+		fi
 	fi
 
 	einfo "Checking default drivers permissions"
@@ -142,7 +153,6 @@ pkg_postinst() {
 		einfo "You should proceed your database configuration"
 		einfo "Please provide MySQL root password"
 		einfo "# /usr/bin/mysqladmin -u root -h localhost password 'new-password'"
-
 		einfo
 		einfo "# /etc/init.d/mysql start"
 		einfo "# mysql -u root -p < /usr/lib/ruby/openplacos/setup_files/install.sql"
