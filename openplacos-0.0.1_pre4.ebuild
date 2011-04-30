@@ -110,7 +110,7 @@ src_install () {
        			fperms +x /usr/bin/openplacos-gtk || die
 		else
 			dohard ${OPOS_PATH}/client/deprecated/gtk/gtk.rb /usr/bin/openplacos-gtk || die
-			fperms +x /usr/bin/openplacos-gtk
+			fperms +x /usr/bin/openplacos-gtk || die
 		fi
 	fi
 
