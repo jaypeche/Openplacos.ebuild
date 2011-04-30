@@ -141,6 +141,8 @@ pkg_postinst() {
 		einfo "Before running OpemplacOS for first time"
 		einfo "You should proceed your database configuration"
 		einfo "Please provide MySQL root password"
+		einfo "# /usr/bin/mysqladmin -u root -h localhost password 'new-password'"
+
 		einfo
 		einfo "# /etc/init.d/mysql start"
 		einfo "# mysql -u root -p < /usr/lib/ruby/openplacos/setup_files/install.sql"
