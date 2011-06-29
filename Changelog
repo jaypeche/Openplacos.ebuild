@@ -1,12 +1,25 @@
-# ChangeLog for dev-ruby/openplacos
+# ChangeLog for app-misc/openplacos
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: 
+
+* openplacos-0.2.0 Git revision
+	(29 Jun 2011) jay <ruby@gentoo.org>
+	+ Stable release v0.2.0, add bundler for gems
+	+ Arduino dependencies, trivial changes
+	+ Ebuild moved to app-misc/openplacos
+
+* openplacos-0.1.1 Git revision
+
+	(21 jun 2011) jay <ruby@gentoo.org>
+	+ First release revision 1, bugfix: micro-optparse default values
+	+ fix micro-optparse v1.1.5
 
 * openplacos-0.0.1 Git revision
 
 	(15 apr 2011) jay <ruby@gentoo.org>
 	+ functionnal commit in testing mode (gtk)
+	+ Ebuild marked to _pre4
 
 	(22 Jan 2011) jay <ruby@gentoo.org>
 	+ add ruby-dbus multithread gem; add branch unstable; add sqlite3 gem;

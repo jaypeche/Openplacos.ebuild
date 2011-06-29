@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pkgmetadata>
-  <herd>ruby</herd>
+  <herd>openplacos</herd>
     <maintainer>
       <email>ruby@gentoo.org</email>
     </maintainer>
   <longdescription>
-This utility is used to create a low cost automation system controlled by computer.
+This utility is used to create a low cost home automation system controlled by computer.
   </longdescription>
 </pkgmetadata>

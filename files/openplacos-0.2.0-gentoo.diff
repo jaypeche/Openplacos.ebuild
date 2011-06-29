@@ -1,0 +1,11 @@
+diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplacos
+--- openplacos.orig/setup_files/openplacos	2011-06-29 12:59:38.000000000 +0200
++++ openplacos/setup_files/openplacos	2011-06-29 12:51:08.000000000 +0200
+@@ -3,6 +3,7 @@
+ case "$1" in
+     	start)
+         	echo "Starting OpenplacOS"
++		export RUBYOPT="rubygems"
+ 		su -l openplacos -s /bin/sh -c "/usr/bin/openplacos-server /etc/default/openplacos > /tmp/openplacos.log &"
+     if [ $? -gt 0 ]; then
+ 		    exit 1

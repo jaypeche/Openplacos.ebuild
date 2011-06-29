@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header:
+# $Header: $
 
 EAPI="2"
 
@@ -21,12 +21,13 @@ OPOS_PATH="/usr/lib/ruby/openplacos"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~x86 ~amd64"
-IUSE="gnome mysql +multithread nagios +sqlite3 -testing"
+IUSE="gnome multithread mysql nagios -phidget +sqlite3 -testing"
 
 DEPEND="dev-vcs/git
 	sys-apps/dbus
 	dev-lang/ruby
 	>=dev-ruby/rubygems-1.3.7-r1
+	phidget? ( dev-embedded/phidget )
 	mysql?  ( dev-db/mysql )
 	gnome?  ( dev-ruby/ruby-gnome2
 		>=x11-libs/gtk+-2.20.1 )
@@ -46,7 +47,7 @@ pkg_setup() {
 	#			at commit 89843b67e85a941317049d523a545042a4fddb07
 
 	if use multithread ; then
-		einfo "Installing ruby-dbus with multithreading"
+		einfo "Installing ruby-dbus multithread branch"
 		cd ${T}
 		einfo "Cloning files"
 		git clone git://github.com/mvidner/ruby-dbus.git || die "git clone failed !"
@@ -59,7 +60,7 @@ pkg_setup() {
 		einfo "Installing gem"
 		gem install ${T}/ruby-dbus/pkg/*.gem --no-ri --no-rdoc || die "gem install failed !"
 	else
-		einfo "Installing default ruby-dbus gem"
+		ewarn "Installing ruby-dbus with gem method"
 		gem install ruby-dbus --no-ri --no-rdoc || die "gem install failed !"
 	fi
 
@@ -110,6 +111,8 @@ src_install () {
 	dohard ${OPOS_PATH}/client/soap/server/soap-server.rb  /usr/bin/openplacos-server-soap || die
         fperms +x /usr/bin/openplacos-server-soap || die
 
+	else
+	ewarn "WARNING! Plugins was not installated in testing mode"
 	fi
 
 	einfo "Checking default drivers permissions"
