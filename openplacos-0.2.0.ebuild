@@ -9,17 +9,17 @@ inherit eutils git
 DESCRIPTION="This utility is used to create a low cost home automation system controlled by computer"
 HOMEPAGE="http://openplacos.tuxfamily.org/"
 
-EGIT_REPO_URI="http://github.com/openplacos/openplacos"
+EGIT_REPO_URI="git://github.com/openplacos/openplacos.git"
 EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
 EGIT_BRANCH="master"
-EGIT_COMMIT="62351647d7ea3896ac98e51d7e4ee5b2b0343af2"
+#EGIT_COMMIT="62351647d7ea3896ac98e51d7e4ee5b2b0343af2"
 
 OPOS_PATH="/usr/lib/ruby/openplacos"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="x86 amd64"
-IUSE="-arduino +gtk2"
+IUSE="-arduino -gtk2"
 
 DEPEND="dev-vcs/git
 	sys-apps/dbus
@@ -30,32 +30,24 @@ DEPEND="dev-vcs/git
 	gtk2? ( dev-ruby/ruby-gnome2
 	>=x11-libs/gtk+-2.20.1 )"
 
-pkg_setup() {
-
-	einfo
-	einfo "OpenplacOS bundle install"
-	einfo "This could take a while.. please wait..."
-	gem install bundler --bindir /usr/bin --no-ri --no-rdoc
-	cd ${OPOS_PATH} && bundle install || die "bundle install failed !"
-
-	einfo
-	einfo "Rails bundle install"
-	einfo "This could take a while.. please wait..."
-	cd ${OPOS_PATH}/plugins/rorplacos/ && bundle install || die "bundle install failed !"
-}
-
-src_unpack () {
-	git_src_unpack || die "src_unpack failed !"
-}
-
 src_install () {
 
+	# Copying files
+	einfo
 	einfo "Copying files"
 	insinto ${OPOS_PATH} || die "insinto failed !"
-	doins -r * || die "doins failed !"
+	cp -dpR * ${D}/${OPOS_PATH} || die "copy failed !"
+
+	# Ruby on Rails files
+	dodir ${OPOS_PATH}/plugins/rorplacos/tmp || die "dodir failed !"
+	dodir ${OPOS_PATH}/plugins/rorplacos/log || die
+	fowners -R openplacos /usr/lib/ruby/openplacos/plugins/rorplacos/tmp || die "fowners failed !"
+	fowners -R openplacos /usr/lib/ruby/openplacos/plugins/rorplacos/log || die
+
+	# Fix(020711) ROR permissions
+	fperms +x ${OPOS_PATH}/plugins/fill_sql.rb || die
 
 	einfo "Linking common executables files"
-
 	# OPOS Server
 	dohard ${OPOS_PATH}/server/main.rb /usr/bin/openplacos-server || die
 	fperms +x /usr/bin/openplacos-server || die
@@ -78,12 +70,6 @@ src_install () {
 		fperms +x /usr/bin/openplacos-gtk || die
 	fi
 
-	# Ruby on Rails files
-	dodir ${OPOS_PATH}/plugins/rorplacos/tmp || die "dodir failed !"
-	dodir ${OPOS_PATH}/plugins/rorplacos/log || die
-	fowners -R openplacos /usr/lib/ruby/openplacos/plugins/rorplacos/tmp || die "fowners failed !"
-	fowners -R openplacos /usr/lib/ruby/openplacos/plugins/rorplacos/log || die
-
 	einfo "Checking default drivers permissions"
 	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/VirtualPlacos.rb || die "fperms failed !"
 	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/compensation_hygro.rb || die
@@ -99,6 +85,8 @@ src_install () {
 	doins setup_files/*.service || die "doins failed !"
 	insinto /etc/dbus-1/system.d || die
 	doins setup_files/openplacos.conf || die
+	insinto /etc/udev/rules.d/ || die
+	doins setup_files/10-openplacos.rules || die
 
 	einfo "Copying daemon file"
 	insinto /etc/init.d || die "insinto failed !"
@@ -108,11 +96,23 @@ src_install () {
 
 pkg_postinst() {
 
+	# Gems Bundler install for opos
+        einfo
+        einfo "OpenplacOS bundle install"
+        einfo "This could take a while.. please wait..."
+        gem install bundler --bindir /usr/bin --no-ri --no-rdoc
+        cd ${OPOS_PATH} && bundle install || die "bundle install failed !"
+
+        einfo
+        einfo "Rails bundle install"
+        einfo "This could take a while.. please wait..."
+        cd ${OPOS_PATH}/plugins/rorplacos/ && bundle install || die "bundle install failed !"
+
 	# Adding openplacos user in following groups
 	enewuser openplacos -1 -1 -1 usb,dialout || die "enewuser failed !"
 
 	einfo "Reloading dbus"
-	/etc/init.d/dbus reload
+	#/etc/init.d/dbus reload
 
 	einfo
 	einfo "Before running OpemplacOS for first time"
@@ -133,7 +133,12 @@ pkg_postinst() {
 		einfo
 		einfo "Now, you can launch GTK Client for example"
 		einfo "$ /usr/bin/openplacos-gtk"
+	else
+		einfo
+		einfo "Now, you can launch OpenplacOS client in command line for example"
+		einfo "$ /usr/bin/openplacos"
 	fi
+
 	einfo
 	einfo "Look at http://openplacos.tuxfamily.org for more information"
 	einfo
