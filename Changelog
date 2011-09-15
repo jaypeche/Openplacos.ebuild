@@ -1,8 +1,11 @@
 # ChangeLog for app-misc/openplacos
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: 
 
+* openplacos-0.3.0 Git revision
+	(15 Sep 2011) jay <ruby@gentoo.org>
+	+ Stable release v0.3.0
 
 * openplacos-0.2.0 Git revision
 	(11 Sep 2011) jay <ruby@gentoo.org>
@@ -14,9 +17,9 @@
 
 * openplacos-0.1.1 Git revision
 
-	(21 jun 2011) jay <ruby@gentoo.org>
-	+ First release revision 1, bugfix: micro-optparse default values
-	+ fix micro-optparse v1.1.5
+	(31 may 2011) jay <ruby@gentoo.org>
+	+ First release revision 1
+	+ bugfix gem: micro-optparse default values
 
 * openplacos-0.0.1 Git revision
 
@@ -25,7 +28,7 @@
 	+ Ebuild marked to _pre4
 
 	(22 Jan 2011) jay <ruby@gentoo.org>
-	+ add ruby-dbus multithread gem; add branch unstable; add sqlite3 gem;
+	+ add ruby-dbus multithread gem; add branch unstable; add sqlite3 gem
 	+ Ebuild marked to _pre3
 
 	(15 Jan 2011) jay <ruby@gentoo.org>
@@ -33,9 +36,9 @@
 	+ fix path; fix links; +metadata.xml; +Ebuild marked to _pre2
 	
 	(14 Jan 2011) jay <ruby@gentoo.org>
-	+ Add Gentoo patch support; Standard git cmd; Nagios, Gnome, GTK+-2 support;
-	+ Installing files and linking; dbus integration; default config; daemon install; 
-	+ Ebuild marked to _pre1;
+	+ Add Gentoo patch support; Standard git cmd; Nagios, Gnome, GTK+-2 support
+	+ Installing files and linking; dbus integration; default config; daemon install
+	+ Ebuild marked to _pre1
 
         (13 Jan 2011) jay <ruby@gentoo.org>
         -> New ebuild
