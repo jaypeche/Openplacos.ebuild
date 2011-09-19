@@ -76,9 +76,9 @@ src_install () {
 
 	einfo "Copying default configuration"
 	insinto /etc/default || die "insinto failed !"
-	doins server/config_with_VirtualPlacos.yaml || die "doins failed"
-	mv -f ${D}/etc/default/config_with_VirtualPlacos.yaml ${D}/etc/default/openplacos || die "mv config failed !"
-	dosym /etc/default/openplacos /etc/conf.d/openplacos || die "dosym failed !"
+       	doins server/config_with_VirtualPlacos_and_RoR.yaml || die "doins failed"
+       	mv -f ${D}/etc/default/config_with_VirtualPlacos_and_RoR.yaml ${D}/etc/default/openplacos || die "mv config failed !"
+       	dosym /etc/default/openplacos /etc/conf.d/openplacos || die "dosym failed !"
 
 	einfo "Copying Dbus integration files"
 	insinto /usr/share/dbus-1/system-services || die "insinto failed !"
@@ -135,8 +135,8 @@ pkg_postinst() {
 		einfo "$ /usr/bin/openplacos-gtk"
 	else
 		einfo
-		einfo "Now, you can launch OpenplacOS client in command line for example"
-		einfo "$ /usr/bin/openplacos"
+		einfo "Now, you can launch Web-based user interface for example,"
+		einfo "URL: http://localhost/admin:3000"
 	fi
 
 	einfo

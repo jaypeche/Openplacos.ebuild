@@ -4,12 +4,15 @@
 # $Header: 
 
 * openplacos-0.3.0 Git revision
+
 	(15 Sep 2011) jay <ruby@gentoo.org>
 	+ Stable release v0.3.0
 
 * openplacos-0.2.0 Git revision
+
 	(11 Sep 2011) jay <ruby@gentoo.org>
 	+ fix repositary perms
+
 	(29 Jun 2011) jay <ruby@gentoo.org>
 	+ Stable release v0.2.0, add bundler for gems
 	+ Arduino dependencies, trivial changes
