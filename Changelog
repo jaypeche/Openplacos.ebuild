@@ -5,6 +5,9 @@
 
 * openplacos-0.3.0 Git revision
 
+	(23 Sep 2011) jay <ruby@gentoo.org>
+	+ Migrate to git-2 Eclass
+
 	(15 Sep 2011) jay <ruby@gentoo.org>
 	+ Stable release v0.3.0
 
