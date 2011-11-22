@@ -29,6 +29,11 @@ DEPEND="dev-vcs/git
 	gtk2? ( dev-ruby/ruby-gnome2
 	>=x11-libs/gtk+-2.20.1 )"
 
+pkg_setup() {
+	enewgroup dialout || die
+	enewuser openplacos -1 -1 -1 dialout,usb || die
+}
+
 src_unpack () {
 	git-2_src_unpack ${A}
 		cd "${S}"
@@ -42,14 +47,12 @@ src_install () {
 	# Copying files
 	einfo
 	einfo "Copying files"
-	insinto ${OPOS_PATH} || die "insinto failed !"
+	insinto ${OPOS_PATH}
 	cp -dpR * ${D}/${OPOS_PATH} || die "copy failed !"
 
 	# Ruby on Rails files (TODO: fix upstream)
-	dodir ${OPOS_PATH}/plugins/rorplacos/tmp || die "dodir failed !"
-	dodir ${OPOS_PATH}/plugins/rorplacos/log || die
-	#fowners -R openplacos /usr/lib/ruby/openplacos/plugins/rorplacos/tmp || die "fowners failed !"
-	#fowners -R openplacos /usr/lib/ruby/openplacos/plugins/rorplacos/log || die
+	dodir ${OPOS_PATH}/plugins/rorplacos/{tmp,log} || die "dodir failed !"
+	fowners -R openplacos ${OPOS_PATH}/plugins/rorplacos/{tmp,log} || die "fowners failed !"
 
 	einfo "Linking common executables files"
 	# OPOS Server
@@ -75,25 +78,24 @@ src_install () {
 	fi
 
 	einfo "Checking default drivers permissions"
-	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/VirtualPlacos.rb || die "fperms failed !"
-	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/compensation_hygro.rb || die
+	fperms a+x ${OPOS_PATH}/drivers/VirtualPlacos/{VirtualPlacos.rb,compensation_hygro.rb} || die "fperms failed !"
 
 	einfo "Copying default configuration"
-	insinto /etc/default || die "insinto failed !"
+	insinto /etc/default
        	doins server/config_with_VirtualPlacos_and_RoR.yaml || die "doins failed"
        	mv -f ${D}/etc/default/config_with_VirtualPlacos_and_RoR.yaml ${D}/etc/default/openplacos || die "mv config failed !"
        	dosym /etc/default/openplacos /etc/conf.d/openplacos || die "dosym failed !"
 
 	einfo "Copying Dbus integration files"
-	insinto /usr/share/dbus-1/system-services || die "insinto failed !"
+	insinto /usr/share/dbus-1/system-services
 	doins setup_files/*.service || die "doins failed !"
-	insinto /etc/dbus-1/system.d || die
+	insinto /etc/dbus-1/system.d
 	doins setup_files/openplacos.conf || die
-	insinto /etc/udev/rules.d/ || die
+	insinto /etc/udev/rules.d/
 	doins setup_files/10-openplacos.rules || die
 
 	einfo "Copying daemon file"
-	insinto /etc/init.d || die "insinto failed !"
+	insinto /etc/init.d
 	doins setup_files/openplacos || die "doins failed !"
 	fperms +x /etc/init.d/openplacos || die "fperms failed !"
 }
@@ -112,25 +114,9 @@ pkg_postinst() {
         einfo "This could take a while.. please wait..."
         cd ${OPOS_PATH}/plugins/rorplacos/ && bundle install || die "bundle install failed !"
 
-	# Adding openplacos user and dialout group
-	einfo
-	einfo "Creating group and user for openplacos"
-
-	if grep "^dialout" /etc/group > /dev/null
-		then ewarn "Oops, dialout group already exists !"
-			else
-		enewgroup dialout || die "enewgroup failed !"
-	fi
-
-	if grep "^openplacos" /etc/passwd > /dev/null
-		then ewarn "Oops, openplacos user already exists !"
-			else
-		enewuser openplacos -1 -1 -1 dialout,usb || die "enewuser failed !"
-	fi
-
 	einfo
 	einfo "Reloading dbus config"
-	/etc/init.d/dbus reload > /dev/null || die "reloading dbus failed !"
+	/etc/init.d/dbus reload > /dev/null || die
 
 	einfo
 	einfo "Before running OpemplacOS for first time"
