@@ -30,8 +30,8 @@ DEPEND="dev-vcs/git
 	>=x11-libs/gtk+-2.20.1 )"
 
 pkg_setup() {
-	enewgroup dialout || die
-	enewuser openplacos -1 -1 -1 dialout,usb || die
+	enewgroup dialout
+	enewuser openplacos -1 -1 -1 dialout,usb
 }
 
 src_unpack () {
@@ -39,6 +39,8 @@ src_unpack () {
 		cd "${S}"
 		if use debug; then
 			epatch "${FILESDIR}/${P}-debug.diff" || die "epatch failed !"
+		else
+				epatch "${FILESDIR}/${P}-gentoo.diff" || die "epatch failed !"
 		fi
 }
 
@@ -115,17 +117,16 @@ pkg_postinst() {
         cd ${OPOS_PATH}/plugins/rorplacos/ && bundle install || die "bundle install failed !"
 
 	einfo
-	einfo "Reloading dbus config"
-	/etc/init.d/dbus reload > /dev/null || die
+	/etc/init.d/dbus reload || die
 
 	einfo
 	einfo "Before running OpemplacOS for first time"
 	einfo "You should proceed your database configuration"
 	einfo "Please provide MySQL root password"
 	einfo
+	einfo "# /etc/init.d/mysql start"
 	einfo "# /usr/bin/mysqladmin -u root -h localhost password 'new-password'"
 	einfo
-	einfo "# /etc/init.d/mysql start"
 	einfo "# mysql -u root -p < /usr/lib/ruby/openplacos/setup_files/install.sql"
 	einfo "# rc-update add mysql default"
 
