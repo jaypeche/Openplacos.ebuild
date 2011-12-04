@@ -1,11 +1,67 @@
 diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplacos
---- openplacos.orig/setup_files/openplacos	2011-09-15 18:22:29.000000000 +0200
-+++ openplacos/setup_files/openplacos	2011-09-15 18:24:07.000000000 +0200
-@@ -3,6 +3,7 @@
- case "$1" in
-     	start)
-         	echo "Starting OpenplacOS"
-+		export RUBYOPT="rubygems"
- 		su -l openplacos -s /bin/sh -c "/usr/bin/openplacos-server /etc/default/openplacos > /tmp/openplacos.log &"
-     if [ $? -gt 0 ]; then
- 		    exit 1
+--- openplacos.orig/setup_files/openplacos	2011-12-04 14:19:23.860034534 +0100
++++ openplacos/setup_files/openplacos	2011-12-04 14:21:25.270034495 +0100
+@@ -1,31 +1,33 @@
+-#!/bin/bash
++#!/sbin/runscript
++# Copyright 1999-2011 Gentoo Foundation
++# Distributed under the terms of the GNU General Public License v2
++# $Header: $
+ 
+-case "$1" in
+-    	start)
+-        	echo "Starting OpenplacOS"
+-		su -l openplacos -s /bin/sh -c "/usr/bin/openplacos-server /etc/default/openplacos > /tmp/openplacos.log &"
+-    if [ $? -gt 0 ]; then
+-		    exit 1
+-		else
+-		    exit 0
+-		fi
+-	;;
+-    	stop)
+-        	echo "Stopping OpenplacOS"
+-		pkill openplacos -u openplacos
+-		if [ $? -gt 0 ]; then
+-		    exit 1
+-		else
+-		    exit 0
+-		fi
+-    
+-	;;
+-    	restart)
+-        	$0 stop
+-		sleep 1
+-        	$0 start
+-        ;;
+-    	*)
+-        	echo "usage: $0 {start|stop|restart}"
+-esac
+-exit 0
++DESC="This utility is used to create a low cost home automation system controlled by computer"
++HOMEPAGE="http://openplacos.tuxfamily.org/"
++
++NAME="openplacos-server"
++USER=openplacos
++DAEMON=$(which $NAME)
++PIDFILE=/var/run/openplacos.pid
++CONFIG=/etc/default/openplacos
++LOGFILE=/tmp/openplacos.log
++
++depend() {
++	need dbus mysql
++	after logger
++}
++
++start() {
++	ebegin "Starting openplacos"
++	export RUBYOPT="rubygems"
++	start-stop-daemon --start --user ${USER} --exec ${DAEMON} \
++	--pidfile $PIDFILE --make-pidfile --background
++	eend $? "Failed to start openplacos !"
++}
++
++stop() {
++        ebegin "Stopping openplacos"
++	start-stop-daemon --stop --quiet --user ${USER} --pidfile $PIDFILE
++        eend $? "Failed to stop openplacos !"
++}
