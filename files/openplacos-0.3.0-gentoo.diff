@@ -42,7 +42,7 @@ diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplac
 +
 +SVCNAME="openplacos-server"
 +USER=openplacos
-+DAEMON=$(which $SVCNAME)
++DAEMON=$(which ${SVCNAME})
 +PIDFILE=/var/run/openplacos.pid
 +CONFIG=/etc/default/openplacos
 +LOGFILE=/tmp/openplacos.log
@@ -56,12 +56,12 @@ diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplac
 +	ebegin "Starting openplacos"
 +	export RUBYOPT="rubygems"
 +	start-stop-daemon --start --user ${USER} --exec ${DAEMON} \
-+	--pidfile $PIDFILE --make-pidfile --background --stdout ${LOGFILE}
++	--pidfile ${PIDFILE} --make-pidfile --background --stdout ${LOGFILE}
 +	eend $? "Failed to start openplacos !"
 +}
 +
 +stop() {
 +        ebegin "Stopping openplacos"
-+	start-stop-daemon --stop --quiet --user ${USER} --pidfile $PIDFILE
++	start-stop-daemon --stop --quiet --user ${USER} --pidfile ${PIDFILE}
 +        eend $? "Failed to stop openplacos !"
 +}
