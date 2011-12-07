@@ -37,12 +37,12 @@ diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplac
 -        	echo "usage: $0 {start|stop|restart}"
 -esac
 -exit 0
-+DESC="This utility is used to create a low cost home automation system controlled by computer"
++DESCRIPTION="This utility is used to create a low cost home automation system controlled by computer"
 +HOMEPAGE="http://openplacos.tuxfamily.org/"
 +
-+NAME="openplacos-server"
++SVCNAME="openplacos-server"
 +USER=openplacos
-+DAEMON=$(which $NAME)
++DAEMON=$(which $SVCNAME)
 +PIDFILE=/var/run/openplacos.pid
 +CONFIG=/etc/default/openplacos
 +LOGFILE=/tmp/openplacos.log
@@ -56,7 +56,7 @@ diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplac
 +	ebegin "Starting openplacos"
 +	export RUBYOPT="rubygems"
 +	start-stop-daemon --start --user ${USER} --exec ${DAEMON} \
-+	--pidfile $PIDFILE --make-pidfile --background
++	--pidfile $PIDFILE --make-pidfile --background --stdout ${LOGFILE}
 +	eend $? "Failed to start openplacos !"
 +}
 +

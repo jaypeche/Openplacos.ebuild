@@ -95,10 +95,8 @@ src_install () {
 	insinto /etc/udev/rules.d/
 	doins setup_files/10-openplacos.rules || die
 
-	einfo "Copying daemon file"
-	insinto /etc/init.d
-	doins setup_files/openplacos || die "doins failed !"
-	fperms +x /etc/init.d/openplacos || die "fperms failed !"
+	einfo "Installing daemon file"
+	doinitd setup_files/openplacos || die "doinitd failed !"
 }
 
 pkg_postinst() {
