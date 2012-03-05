@@ -11,8 +11,8 @@ HOMEPAGE="http://openplacos.sourceforge.net/"
 
 EGIT_REPO_URI="git://openplacos.git.sourceforge.net/gitroot/openplacos/openplacos"
 EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
-#EGIT_BRANCH="master"
-#EGIT_COMMIT="cb870d950ccb2b78264c66841a296df1e52cb284"
+EGIT_BRANCH="master"
+EGIT_COMMIT="cb870d950ccb2b78264c66841a296df1e52cb284"
 
 OPOS_PATH="/usr/lib/ruby/openplacos"
 

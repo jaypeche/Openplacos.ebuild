@@ -12,7 +12,7 @@ HOMEPAGE="http://openplacos.tuxfamily.org/"
 EGIT_REPO_URI="git://github.com/openplacos/openplacos.git"
 EGIT_PATCHES="${FILESDIR}/${P}-gentoo.diff"
 EGIT_BRANCH="master"
-EGIT_COMMIT="62351647d7ea3896ac98e51d7e4ee5b2b0343af2"
+#EGIT_COMMIT="62351647d7ea3896ac98e51d7e4ee5b2b0343af2"
 
 OPOS_PATH="/usr/lib/ruby/openplacos"
 

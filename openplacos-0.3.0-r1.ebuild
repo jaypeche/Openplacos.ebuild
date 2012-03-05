@@ -107,7 +107,7 @@ pkg_postinst() {
         einfo
         einfo "OpenplacOS bundle install"
         einfo "This could take a while.. please wait..."
-        gem install bundler --bindir /usr/bin --no-ri --no-rdoc
+        gem install bundler --bindir /usr/bin --no-ri --no-rdoc ||  die "gem install failed !"
         cd ${OPOS_PATH} && bundle install || die "bundle install failed !"
 
         einfo
@@ -138,12 +138,12 @@ pkg_postinst() {
 
 	if use gtk2 ; then
 		einfo
-		einfo "Now, you can launch GTK Client for example"
+		einfo "Now, you can launch GTK client for example"
 		einfo "$ /usr/bin/openplacos-gtk"
 	else
 		einfo
-		einfo "Now, you can launch Web-based user interface for example,"
-		einfo "URL: http://localhost/admin:3000"
+		einfo "Now, you can launch web interface for example,"
+		einfo "URL: http://localhost:3000/login"
 	fi
 
 	einfo

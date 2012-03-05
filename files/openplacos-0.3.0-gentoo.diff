@@ -1,7 +1,7 @@
 diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplacos
---- openplacos.orig/setup_files/openplacos	2011-12-04 14:19:23.860034534 +0100
-+++ openplacos/setup_files/openplacos	2011-12-04 14:21:25.270034495 +0100
-@@ -1,31 +1,33 @@
+--- openplacos.orig/setup_files/openplacos	2011-12-07 08:31:51.000000000 +0100
++++ openplacos/setup_files/openplacos	2012-02-21 16:21:47.000000000 +0100
+@@ -1,31 +1,53 @@
 -#!/bin/bash
 +#!/sbin/runscript
 +# Copyright 1999-2011 Gentoo Foundation
@@ -38,30 +38,50 @@ diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplac
 -esac
 -exit 0
 +DESCRIPTION="This utility is used to create a low cost home automation system controlled by computer"
-+HOMEPAGE="http://openplacos.tuxfamily.org/"
++HOMEPAGE="http://openplacos.tuxfamily.org"
 +
 +SVCNAME="openplacos-server"
 +USER=openplacos
 +DAEMON=$(which ${SVCNAME})
 +PIDFILE=/var/run/openplacos.pid
-+CONFIG=/etc/default/openplacos
++CONFIGFILE=/etc/default/openplacos
 +LOGFILE=/tmp/openplacos.log
 +
 +depend() {
-+	need dbus mysql
-+	after logger
++        need dbus mysql
++        after logger
++}
++
++checkconfig() {
++        if [ ! -r ${CONFIGFILE} ]; then
++                eerror "ERROR: Unable to read configuration file: ${CONFIGFILE}"
++                return 1
++        fi
++}
++
++checkprocess() {
++        if [ $(ps ax | grep ${SVCNAME} | grep -v grep | wc -l) -eq 0 ]; then
++                eerror "ERROR: Please, check logfile: ${LOGFILE}"
++                return 1
++        fi
 +}
 +
 +start() {
-+	ebegin "Starting openplacos"
-+	export RUBYOPT="rubygems"
-+	start-stop-daemon --start --user ${USER} --exec ${DAEMON} \
-+	--pidfile ${PIDFILE} --make-pidfile --background --stdout ${LOGFILE}
-+	eend $? "Failed to start openplacos !"
++        checkconfig || return $?
++
++        ebegin "Starting openplacos"
++        export RUBYOPT="rubygems"
++        start-stop-daemon --start --user ${USER} --exec ${DAEMON} \
++        --pidfile ${PIDFILE} --make-pidfile --background --stdout ${LOGFILE}
++
++        sleep 3
++        checkprocess || return $?
++
++        eend $? "Failed to start openplacos !"
 +}
 +
 +stop() {
 +        ebegin "Stopping openplacos"
-+	start-stop-daemon --stop --quiet --user ${USER} --pidfile ${PIDFILE}
++        start-stop-daemon --stop --quiet --user ${USER} --exec ${DAEMON} --pidfile ${PIDFILE}
 +        eend $? "Failed to stop openplacos !"
 +}
