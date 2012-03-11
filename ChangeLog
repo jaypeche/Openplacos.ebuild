@@ -5,52 +5,52 @@
 
 * openplacos-0.3.0 Git revision
 	
-	(04 Dec 2011) jay <ruby@gentoo.org>
+	(04 Dec 2011) jay <jaypeche@gmail.com>
 	+ Gentoo standard initscript, Ebuild marked rev3	
 	
-	(15 Nov 2011) jay <ruby@gentoo.org>
+	(15 Nov 2011) jay <jaypeche@gmail.com>
 	+ some fix for new install, Ebuild marked rev2
 
-	(23 Sep 2011) jay <ruby@gentoo.org>
+	(23 Sep 2011) jay <jaypeche@gmail.com>
 	+ Migrate to Git2 Ebuild class, Ebuild marked rev1
 	
-	(15 Sep 2011) jay <ruby@gentoo.org>
+	(15 Sep 2011) jay <jaypeche@gmail.com>
 	+ Stable release v0.3.0
 
 * openplacos-0.2.0 Git revision
 
-	(11 Sep 2011) jay <ruby@gentoo.org>
+	(11 Sep 2011) jay <jaypeche@gmail.com>
 	+ fix repositary perms
 
-	(29 Jun 2011) jay <ruby@gentoo.org>
+	(29 Jun 2011) jay <jaypeche@gmail.com>
 	+ Stable release v0.2.0, add bundler for gems
 	+ Arduino dependencies, trivial changes
 	+ Ebuild moved to app-misc/openplacos
 
 * openplacos-0.1.1 Git revision
 
-	(21 jun 2011) jay <ruby@gentoo.org>
+	(21 jun 2011) jay <jaypeche@gmail.com>
 	+ First release revision 1, bugfix: micro-optparse default values
 	+ fix micro-optparse v1.1.5
 
 * openplacos-0.0.1 Git revision
 
-	(15 apr 2011) jay <ruby@gentoo.org>
+	(15 apr 2011) jay <jaypeche@gmail.com>
 	+ functionnal commit in testing mode (gtk)
 	+ Ebuild marked to _pre4
 
-	(22 Jan 2011) jay <ruby@gentoo.org>
+	(22 Jan 2011) jay <jaypeche@gmail.com>
 	+ add ruby-dbus multithread gem; add branch unstable; add sqlite3 gem;
 	+ Ebuild marked to _pre3
 
-	(15 Jan 2011) jay <ruby@gentoo.org>
+	(15 Jan 2011) jay <jaypeche@gmail.com>
 	+ Add Gentoo_Install doc; trivial changes;
 	+ fix path; fix links; +metadata.xml; +Ebuild marked to _pre2
 	
-	(14 Jan 2011) jay <ruby@gentoo.org>
+	(14 Jan 2011) jay <jaypeche@gmail.com>
 	+ Add Gentoo patch support; Standard git cmd; Nagios, Gnome, GTK+-2 support;
 	+ Installing files and linking; dbus integration; default config; daemon install; 
 	+ Ebuild marked to _pre1;
 
-        (13 Jan 2011) jay <ruby@gentoo.org>
+        (13 Jan 2011) jay <jaypeche@gmail.com>
         -> New ebuild
