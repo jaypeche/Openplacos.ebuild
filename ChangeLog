@@ -54,3 +54,8 @@
 
         (13 Jan 2011) jay <jaypeche@gmail.com>
         -> New ebuild
+ult config; daemon install; 
+	+ Ebuild marked to _pre1;
+
+        (13 Jan 2011) jay <jaypeche@gmail.com>
+        -> New ebuild
