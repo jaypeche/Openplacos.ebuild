@@ -52,7 +52,7 @@ pkg_postinst() {
 	einfo
 	einfo "Bundle install deployment"
 	einfo "This could take a while, please wait..."
-	bundle install --deployment || die
+#	bundle install --deployment || die
 
 	# Fix permissions (upstream?)
 	fowners openplacos ${OPOS_PATH}/server/tmp
