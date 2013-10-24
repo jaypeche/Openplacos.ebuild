@@ -1,0 +1,11 @@
+diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplacos
+--- openplacos.orig/setup_files/openplacos	2012-10-12 16:11:03.356577232 +0200
++++ openplacos/setup_files/openplacos	2012-10-12 16:16:36.566575502 +0200
+@@ -35,6 +35,7 @@
+ 
+ start() {
+         ebegin "Starting openplacos"
++	export DEBUG_OPOS=1
+         start-stop-daemon --start --quiet \
+ 			   --exec ${DBUS_LAUNCHER} ${DAEMON} \
+ 		            --background --stdout ${LOGFILE} \

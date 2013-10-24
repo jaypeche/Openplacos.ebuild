@@ -1,0 +1,111 @@
+diff -urN openplacos.orig/Makefile.defs openplacos/Makefile.defs
+--- openplacos.orig/Makefile.defs	1970-01-01 01:00:00.000000000 +0100
++++ openplacos/Makefile.defs	2012-10-12 16:07:27.676578352 +0200
+@@ -0,0 +1,8 @@
++OS=$(shell uname)
++DESTDIR="${D}"
++INSTALLDIR=/usr/lib/ruby/openplacos
++INITDIR=/etc/init.d
++UDEVDIR=/lib/udev/rules.d
++DBUSCONFDIR=/etc/dbus-1/system.d
++DEFAULTCONFDIR=/etc/default
++BINDIR=/usr/bin
+diff -urN openplacos.orig/Makefile.defs-default openplacos/Makefile.defs-default
+--- openplacos.orig/Makefile.defs-default	2012-10-12 16:04:56.976579135 +0200
++++ openplacos/Makefile.defs-default	1970-01-01 01:00:00.000000000 +0100
+@@ -1,8 +0,0 @@
+-OS=$(shell uname)
+-DESTDIR=
+-INSTALLDIR=/usr/lib/ruby/openplacos
+-INITDIR=/etc/init.d
+-UDEVDIR=/etc/udev/rules.d
+-DBUSCONFDIR=/etc/dbus-1/system.d
+-DEFAULTCONFDIR=/etc/default
+-BINDIR=/usr/bin
+diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplacos
+--- openplacos.orig/setup_files/openplacos	2012-10-12 16:04:57.046579133 +0200
++++ openplacos/setup_files/openplacos	2012-10-12 16:11:03.356577232 +0200
+@@ -1,31 +1,53 @@
+-#!/bin/bash
++#!/sbin/runscript
++# Copyright 1999-2011 Gentoo Foundation
++# Distributed under the terms of the GNU General Public License v2
++# $Header: $
+ 
+-case "$1" in
+-    	start)
+-        	echo "Starting OpenplacOS"
+-		su -l openplacos -s /bin/sh -c "dbus-launch /usr/bin/openplacos-server -f /etc/default/openplacos &"
+-    if [ $? -gt 0 ]; then
+-		    exit 1
+-		else
+-		    exit 0
+-		fi
+-	;;
+-    	stop)
+-        	echo "Stopping OpenplacOS"
+-		pkill openplacos -u openplacos
+-		if [ $? -gt 0 ]; then
+-		    exit 1
+-		else
+-		    exit 0
+-		fi
+-    
+-	;;
+-    	restart)
+-        	$0 stop
+-		sleep 1
+-        	$0 start
+-        ;;
+-    	*)
+-        	echo "usage: $0 {start|stop|restart}"
+-esac
+-exit 0
++DESCRIPTION="This utility is used to create a low cost home automation system controlled by computer"
++HOMEPAGE="http://openplacos.github.io/openplacos/"
++
++SVCNAME="openplacos-server"
++USER=openplacos
++DAEMON=$(which ${SVCNAME})
++DBUS_LAUNCHER=/usr/bin/dbus-launch
++PIDFILE=/var/run/openplacos.pid
++CONFIGFILE=/etc/default/openplacos
++LOGFILE=/tmp/openplacos.log
++
++depend() {
++        need dbus udev
++        after logger
++}
++
++checkconfig() {
++        if [ ! -r ${CONFIGFILE} ]; then
++                eerror "ERROR: Unable to read configuration file: ${CONFIGFILE}"
++                return 1
++        fi
++}
++
++checkprocess() {
++        if [ $(ps ax | grep ${SVCNAME} | grep -v grep | wc -l) -eq 0 ]; then
++                eerror "ERROR: Please, check logfile: ${LOGFILE}"
++                return 1
++        fi
++}
++
++start() {
++        ebegin "Starting openplacos"
++        start-stop-daemon --start --quiet \
++			   --exec ${DBUS_LAUNCHER} ${DAEMON} \
++		            --background --stdout ${LOGFILE} \
++			     --pidfile ${PIDFILE} --make-pidfile
++	sleep 1
++        checkprocess || return $?
++
++        eend $? "Failed to start openplacos !"
++}
++
++stop() {
++        ebegin "Stopping openplacos"
++        start-stop-daemon --stop --quiet --user ${USER} --pidfile ${PIDFILE}
++
++        eend $? "Failed to stop openplacos !"
++}
