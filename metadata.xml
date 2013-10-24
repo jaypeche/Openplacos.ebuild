@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pkgmetadata>
-  <herd>no-herd</herd>
+  <herd>openplacos</herd>
+   <use>
+    <flag name="arduino">Add Arduino dependencies</flag>
+    <flag name="debug">Enable debug mode</flag>
+   </use>
     <maintainer>
-      <email>maintainer-needed@gentoo.org</email>
+      <email>jaypeche@gmail.com</email>
     </maintainer>
   <longdescription>
 This utility is used to create a low cost automation system controlled by computer.

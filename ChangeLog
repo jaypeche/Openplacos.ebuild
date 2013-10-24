@@ -3,6 +3,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header:
 
+* openplacos-0.4.0b Git revision
+
+        (23 Oct 2013) jay <jaypeche@gmail.com>
+        + openplacos v0.4.0b , Ebuild marked stable rev beta
+
+* openplacos-9999 Git devel revision
+	(15 oct 2012) jay <jaypeche@gmail.com>
+	+ New ebuild latest devel Git revision
+
 * openplacos-0.3.0 Git revision
 	
 	(04 Dec 2011) jay <jaypeche@gmail.com>
