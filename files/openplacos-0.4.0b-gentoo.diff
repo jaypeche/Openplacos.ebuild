@@ -1,7 +1,18 @@
+diff -urN openplacos.orig/Makefile openplacos/Makefile
+--- openplacos.orig/Makefile	2013-10-25 18:43:24.279722510 +0200
++++ openplacos/Makefile	2013-10-25 18:47:37.719723192 +0200
+@@ -15,6 +15,7 @@
+ 
+ 	@cp setup_files/openplacos $(DESTDIR)/$(INITDIR)/openplacos
+ 	@cp setup_files/10-openplacos.rules $(DESTDIR)/$(UDEVDIR)/10-openplacos.rules
++	@cp setup_files/virtualplacos-default-gentoo.conf $(DESTDIR)/$(DEFAULTCONFDIR)/openplacos
+ 
+ 	@cp COPYING $(DESTDIR)/$(INSTALLDIR)/COPYING
+ 	@cp README $(DESTDIR)/$(INSTALLDIR)/README
 diff -urN openplacos.orig/Makefile.defs openplacos/Makefile.defs
 --- openplacos.orig/Makefile.defs	1970-01-01 01:00:00.000000000 +0100
-+++ openplacos/Makefile.defs	2012-10-12 16:07:27.676578352 +0200
-@@ -0,0 +1,8 @@
++++ openplacos/Makefile.defs	2013-10-25 18:48:18.689723302 +0200
+@@ -0,0 +1,9 @@
 +OS=$(shell uname)
 +DESTDIR="${D}"
 +INSTALLDIR=/usr/lib/ruby/openplacos
@@ -10,22 +21,11 @@ diff -urN openplacos.orig/Makefile.defs openplacos/Makefile.defs
 +DBUSCONFDIR=/etc/dbus-1/system.d
 +DEFAULTCONFDIR=/etc/default
 +BINDIR=/usr/bin
-diff -urN openplacos.orig/Makefile.defs-default openplacos/Makefile.defs-default
---- openplacos.orig/Makefile.defs-default	2012-10-12 16:04:56.976579135 +0200
-+++ openplacos/Makefile.defs-default	1970-01-01 01:00:00.000000000 +0100
-@@ -1,8 +0,0 @@
--OS=$(shell uname)
--DESTDIR=
--INSTALLDIR=/usr/lib/ruby/openplacos
--INITDIR=/etc/init.d
--UDEVDIR=/etc/udev/rules.d
--DBUSCONFDIR=/etc/dbus-1/system.d
--DEFAULTCONFDIR=/etc/default
--BINDIR=/usr/bin
++
 diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplacos
---- openplacos.orig/setup_files/openplacos	2012-10-12 16:04:57.046579133 +0200
-+++ openplacos/setup_files/openplacos	2012-10-12 16:11:03.356577232 +0200
-@@ -1,31 +1,53 @@
+--- openplacos.orig/setup_files/openplacos	2013-10-25 18:43:24.369722510 +0200
++++ openplacos/setup_files/openplacos	2013-10-25 18:50:16.109723618 +0200
+@@ -1,31 +1,56 @@
 -#!/bin/bash
 +#!/sbin/runscript
 +# Copyright 1999-2011 Gentoo Foundation
@@ -92,12 +92,15 @@ diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplac
 +}
 +
 +start() {
++	checkconfig || return $?
++
 +        ebegin "Starting openplacos"
 +        start-stop-daemon --start --quiet \
 +			   --exec ${DBUS_LAUNCHER} ${DAEMON} \
 +		            --background --stdout ${LOGFILE} \
 +			     --pidfile ${PIDFILE} --make-pidfile
 +	sleep 1
++
 +        checkprocess || return $?
 +
 +        eend $? "Failed to start openplacos !"
@@ -109,3 +112,55 @@ diff -urN openplacos.orig/setup_files/openplacos openplacos/setup_files/openplac
 +
 +        eend $? "Failed to stop openplacos !"
 +}
+diff -urN openplacos.orig/setup_files/virtualplacos-default-gentoo.conf openplacos/setup_files/virtualplacos-default-gentoo.conf
+--- openplacos.orig/setup_files/virtualplacos-default-gentoo.conf	1970-01-01 01:00:00.000000000 +0100
++++ openplacos/setup_files/virtualplacos-default-gentoo.conf	2013-10-25 18:45:53.169722911 +0200
+@@ -0,0 +1,48 @@
++export:
++- /home/temperature
++- /home/humidity
++- /home/fan
++- /home/light
++
++component:
++
++- name: virtualplacos
++  exec: virtualplacos.rb
++  method: thread
++  
++- name: lm335
++  exec: lm335.rb
++  method: thread
++  
++- name: hih3610
++  exec: hih3610.rb
++  method: thread
++  
++- name: pwmdimmer
++  exec: pwm_dimmer.rb
++  method: thread
++  
++- name: relayno
++  exec: relayno.rb
++  method: thread
++  
++- name: regulation
++  exec: regulation.rb
++  method: thread
++  config:
++    type: pwm
++
++mapping:
++- /lm335/raw: /virtualplacos/Analog1
++- /hih3610/raw: /virtualplacos/Analog2
++- /hih3610/temperature: /lm335/temperature
++- /home/temperature: /lm335/temperature
++- /home/humidity: /hih3610/humidity
++- /home/fan: /pwmdimmer/dimmer
++- /pwmdimmer/raw: /virtualplacos/Fan
++- /home/light: /relayno/switch
++- /relayno/raw: /virtualplacos/Light
++- /home/temperature: /regulation/regul
++- /regulation/sensor: /lm335/temperature#analog.sensor.temperature.celcuis
++- /regulation/actuator: /pwmdimmer/dimmer
++
