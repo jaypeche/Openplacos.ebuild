@@ -4,6 +4,7 @@
    <use>
     <flag name="arduino">Add Arduino dependencies</flag>
     <flag name="debug">Enable debug mode</flag>
+    <flag name="systemd">Use systemd as system management daemon</flag>
    </use>
     <maintainer>
       <email>jaypeche@gmail.com</email>

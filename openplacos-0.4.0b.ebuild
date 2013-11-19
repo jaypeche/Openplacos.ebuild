@@ -17,14 +17,16 @@ OPOS_PATH="/usr/lib/ruby/openplacos"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~arm x86 amd64"
-IUSE="-arduino -debug"
+IUSE="-arduino -debug -systemd"
 
 DEPEND="dev-vcs/git
 	sys-apps/dbus
 	>=dev-lang/ruby-1.9.3
 	>=dev-db/sqlite-3.7.12
 	>=dev-ruby/rubygems-1.3.7-r1
-	arduino? ( dev-embedded/arduino )"
+	arduino? ( dev-embedded/arduino )
+	systemd? ( sys-apps/gentoo-systemd-integration
+	>=sys-apps/systemd-204-r1 )"
 
 pkg_setup() {
 	enewgroup dialout
@@ -39,6 +41,9 @@ src_unpack () {
 	if use debug; then
 		epatch "${FILESDIR}/${P}-debug.diff" || die "epatch failed !"
 	fi
+	if use systemd; then
+	                epatch "${FILESDIR}/${P}-systemd.diff" || die "epatch failed"
+        fi
 }
 
 src_install () {
@@ -46,11 +51,10 @@ src_install () {
 }
 
 pkg_postinst() {
-        # Gems Bundler install for opos
         einfo
         einfo "OpenplacOS bundle install"
         einfo "This could take a while.. please wait..."
-        gem install bundler --bindir /usr/bin --no-ri --no-rdoc ||  die "gem install"
+        gem install bundler --bindir /usr/bin --no-ri --no-rdoc ||  die "gem install failed !"
         cd ${OPOS_PATH} && bundle install || die "bundle install failed !"
 
 	# Fix permissions (upstream?)
@@ -58,11 +62,22 @@ pkg_postinst() {
 
 	einfo
 	einfo "You should run OpenplacOS like this,"
-        einfo "# /etc/init.d/openplacos start"
+        einfo
+	einfo "# /etc/init.d/openplacos start"
         einfo "# rc-update add openplacos default"
 	einfo
 	einfo "Now, you can launch web interface for example,"
 	einfo "URL: http://localhost:4567"
+
+	if use arduino; then
+		einfo
+		einfo "NOTE: If you're using Arduino UNO Board for example"
+		einfo "You should upload the main firmware into, like this :"
+		einfo
+		einfo "$ avrdude -Dc arduino -p ATMEGA328P -P /dev/arduino -b 115200 \ "
+		einfo "-U flash:w:/usr/lib/ruby/openplacos/utils/arduino_firmware/binaries/Uno.hex"
+	fi
+
 	einfo
 	einfo "Look at http://openplacos.github.io/openplacos for more information"
 	einfo

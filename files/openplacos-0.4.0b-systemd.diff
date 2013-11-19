@@ -1,0 +1,28 @@
+diff -urN openplacos.orig/Makefile openplacos/Makefile
+--- openplacos.orig/Makefile	2013-11-18 13:00:59.669180011 +0100
++++ openplacos/Makefile	2013-11-18 13:02:32.949180262 +0100
+@@ -11,11 +11,12 @@
+ 	install -d $(DESTDIR)/$(INITDIR)
+ 	install -d $(DESTDIR)/$(UDEVDIR)
+ 	install -d $(DESTDIR)/$(BINDIR)
+-
++	install -d $(DESTDIR)/$(SYSTEMDDIR)
+ 
+ 	@cp setup_files/openplacos $(DESTDIR)/$(INITDIR)/openplacos
+ 	@cp setup_files/10-openplacos.rules $(DESTDIR)/$(UDEVDIR)/10-openplacos.rules
+ 	@cp setup_files/virtualplacos-default-gentoo.conf $(DESTDIR)/$(DEFAULTCONFDIR)/openplacos
++	@cp setup_files/openplacos.service $(DESTDIR)/$(SYSTEMDDIR)/openplacos.service
+ 
+ 	@cp COPYING $(DESTDIR)/$(INSTALLDIR)/COPYING
+ 	@cp README $(DESTDIR)/$(INSTALLDIR)/README
+diff -urN openplacos.orig/Makefile.defs openplacos/Makefile.defs
+--- openplacos.orig/Makefile.defs	2013-11-18 13:00:59.669180011 +0100
++++ openplacos/Makefile.defs	2013-11-18 12:57:41.889179479 +0100
+@@ -4,6 +4,7 @@
+ INITDIR=/etc/init.d
+ UDEVDIR=/lib/udev/rules.d
+ DBUSCONFDIR=/etc/dbus-1/system.d
++SYSTEMDDIR=/usr/lib/systemd/system
+ DEFAULTCONFDIR=/etc/default
+ BINDIR=/usr/bin
+ 
