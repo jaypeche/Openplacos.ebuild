@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils git-2
+inherit eutils git-2 user
 
 DESCRIPTION="This utility is used to create a low cost home automation system controlled by computer"
 HOMEPAGE="http://openplacos.github.io/openplacos"
